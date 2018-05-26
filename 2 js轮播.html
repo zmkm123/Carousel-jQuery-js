@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>40js</title>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		li{
+			list-style: none;
+		}
+		
+
+
+		#box{
+			width: 400px;
+			height: 300px;
+			margin:50px auto;
+		}
+		.btn{
+			height: 30px;
+		}
+		.btn span{
+			float: left;
+			width: 75px;
+			height: 30px;
+			margin-right:5px;
+			text-align:center;
+			line-height: 30px;
+			background: #aaa;
+			cursor: pointer;
+			color:#fff;
+		}
+		.btn span.on{
+			background: #f60;
+		}
+
+		.banner{
+			position: relative;
+			width: 100%;
+			height: 270px;
+		}
+		.banner>ul{
+			position: relative;
+			width: 100%;
+			height: 100%;
+		}
+		.banner li{
+			display: none;
+
+		}
+		.banner li.on{
+			display: block;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			font-size:100px;
+			text-align: center;
+			line-height: 270px;
+			color:#fff;
+		}
+		.banner p{
+			position: absolute;
+			height: 25px;
+			width: 100%;
+			text-align: center;
+			line-height: 24px;
+			background: rgba(0,0,0,.3);
+			color:#fff;
+		}
+		.top{
+			top: 0;
+		}
+		.bottom{
+			bottom: 0;
+		}
+		.banner p.btn{
+			height: 70px;
+			width: 35px;
+			top:50%;
+			margin-top:-35px;
+			line-height: 70px;
+			text-align: center;
+			font-size:30px;
+			cursor: pointer;
+		}
+		.banner p.right{
+			right: 0;
+		}
+	</style>
+</head>
+<body>
+    <div id="box">
+    	<div class="btn">
+    		<span class="on">循环切换</span>
+    		<span>单边切换</span>
+    	</div>
+    	<div class="banner">
+    		<ul>
+    			<li class="on" style="background: pink">一</li>
+    			<li style="background: skyblue">二</li>
+    			<li style="background: tan">三</li>
+    			<li style="background: purple">四</li>
+    			<li style="background: orange">五</li>
+    			<li style="background: red">六</li>
+    		</ul>
+    		<p class="top"><span>1</span>/6</p>
+    		<p class="bottom">金克斯</p>
+    		<p class="btn left">&lt;</p>
+    		<p class="btn right">&gt;</p>
+    	</div>
+    </div>
+    <script>
+    	var Btns = document.querySelectorAll(".btn span"),
+    		list = document.getElementsByTagName("li"),
+    		Top = document.getElementsByClassName("top")[0],
+    		txt = Top.getElementsByTagName("span")[0],
+    		Bot = document.getElementsByClassName("bottom")[0],
+    		Prev = document.getElementsByClassName('left')[0],
+    		Next = document.getElementsByClassName("right")[0],
+    		arrTxt = ["金克斯","亚索",'盖伦','易',"泰达米尔",'阿狸'],
+    		index = 0, // 标记当前显示的图片序号
+    		mark = true, //mark用来标记当前是出于循环还是单边切换模式。 true代表循环。false代表单边切换
+    		len = list.length;
+
+
+    	//切换模式
+    	Btns[0].onclick=function(){
+    		this.className = "on";
+    		Btns[1].className = "";
+    		mark = true;
+    	}
+    	Btns[1].onclick=function(){
+    		this.className = "on";
+    		Btns[0].className = "";
+    		mark = false;
+    	}
+
+    	//切换到下一张
+    	Next.onclick=function(){
+    		list[index].className = ""; //隐藏当前图片
+    		index++;  // 把标记切换到下一张图片的序号
+    		if (mark) { //真 就是循环切换
+    			if (index > len-1) { // 6-1 = 5  100-1 = 99
+    				index = 0; // 当最后一张图片时，跳转到第一张
+    			}
+    		}else{// 单边切换
+    			if ( index > len-1) {
+    				index = len-1;
+    				alert('后面没有了')
+    			}
+    		}
+
+    		list[index].className = "on";
+    		txt.innerHTML = index + 1;
+    		Bot.innerText = arrTxt[index];
+    	}
+
+		//切换到上一张
+		Prev.onclick=function(){
+			list[index].className = ""; //隐藏当前图片
+			index--;
+			if (mark) { //真 就是循环切换
+				if (index < 0) { 
+					index = len-1; // 当最后一张图片时，跳转到第一张
+				}
+			}else{// 单边切换
+				if ( index < 0) {
+					index = 0;
+					alert('前面没有了')
+				}
+			}
+			list[index].className = "on";
+			txt.innerHTML = index + 1;
+			Bot.innerText = arrTxt[index];
+		}
+    	
+
+
+
+
+    	/*
+
+
+		Next.isNext = true;
+    	Prev.isNext = false;
+		
+    	Next.onclick=fn;
+    	Prev.onclick=fn;
+
+    	function fn(){
+    		list[index].className = ""; //隐藏当前图片
+    		if (this.isNext) { //真就是下一张
+    			index++;
+    			index = mark ? ((index>len-1)?0:index) : (( index > len-1)? len-1 : index);
+    		}else{ // 假就是上一张
+    			index--;
+    			index =  mark ? ((index < 0)? len-1 : index) : (( index < 0) ? 0 : index);
+    		}
+    		list[index].className = "on";
+    		txt.innerHTML = index + 1;
+    		Bot.innerText = arrTxt[index];
+    	}*/
+
+    	/*function fn(){
+    		list[index].className = ""; //隐藏当前图片
+
+    		if (this.isNext) { //真就是下一张
+    			index++;
+    			if (mark) { //真 就是循环切换
+    				if (index > len-1) { // 6-1 = 5  100-1 = 99
+    					index = 0; // 当最后一张图片时，跳转到第一张
+    				}
+    			}else{// 单边切换
+    				if ( index > len-1) {
+    					index = len-1;
+    					alert('后面没有了')
+    				}
+    			}
+
+    		}else{ // 假就是上一张
+    			index--;
+    			if (mark) { //真 就是循环切换
+    				if (index < 0) { 
+    					index = len-1; // 当最后一张图片时，跳转到第一张
+    				}
+    			}else{// 单边切换
+    				if ( index < 0) {
+    					index = 0;
+    					alert('前面没有了')
+    				}
+    			}
+    		}
+
+    		list[index].className = "on";
+    		txt.innerHTML = index + 1;
+    		Bot.innerText = arrTxt[index];
+    	}*/
+
+
+
+
+    	
+
+
+
+    </script>
+</body>
+</html>
